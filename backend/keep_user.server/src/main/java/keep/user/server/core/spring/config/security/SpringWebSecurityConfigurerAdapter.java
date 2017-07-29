@@ -8,7 +8,6 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.orm.hibernate5.HibernateTransactionManager;
 import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -31,19 +30,11 @@ import keep.user.server.core.hibernate.transaction.CustomHibernateTransactionMan
 @ComponentScan(basePackages = "keep.user.server")
 public class SpringWebSecurityConfigurerAdapter extends WebSecurityConfigurerAdapter {
 
-
-    @Override
-    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.inMemoryAuthentication()
-          	.withUser("chester").password("123456").roles("USER");
-    }
-
     @Override
     protected void configure(HttpSecurity http) throws Exception {
 		http.cors()
 			.and()
-			.authorizeRequests().antMatchers("/oauth/token").permitAll()
-			;
+			.authorizeRequests().anyRequest().permitAll();
     }
 
     @Bean
@@ -51,7 +42,6 @@ public class SpringWebSecurityConfigurerAdapter extends WebSecurityConfigurerAda
 		CorsConfiguration configuration = new CorsConfiguration();
 		configuration.setAllowedOrigins(Arrays.asList("*"));
 		configuration.setAllowedMethods(Arrays.asList("POST, GET, PUT, DELETE"));
-//		configuration.setAllowedHeaders(Arrays.asList("Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With"));
 		UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
 		source.registerCorsConfiguration("/**", configuration);
 		return source;

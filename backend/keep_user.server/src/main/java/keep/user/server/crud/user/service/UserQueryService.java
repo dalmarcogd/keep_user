@@ -22,9 +22,9 @@ public class UserQueryService {
     private CriteriaFactory criteriaFactory;
 
     @Transactional(readOnly = true)
-    public UserEntity getUserByUsername(String username) {
+    public UserEntity getUserByName(String name) {
         Criteria q = criteriaFactory.createCriteria(UserEntity.class);
-        q.add(Restrictions.eq(UserEntity.USERNAME, username));
+        q.add(Restrictions.eq(UserEntity.NAME, name));
         return ClassUtils.toAssignable(UserEntity.class, q.uniqueResult());
     }
 }

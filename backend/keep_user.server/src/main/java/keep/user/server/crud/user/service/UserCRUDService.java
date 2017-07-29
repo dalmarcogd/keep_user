@@ -6,12 +6,14 @@ import org.springframework.stereotype.Service;
 import keep.user.server.crud.base.repository.AbstractCRUDRepository;
 import keep.user.server.crud.base.service.AbstractCRUDService;
 import keep.user.server.crud.user.repository.UserCRUDRepository;
+import keep.user.server.crud.userfunction.service.UserFunctionCRUDService;
 import keep.user.server.model.base.BaseDTO;
 import keep.user.server.model.user.UserDTO;
 import keep.user.server.model.user.UserEntity;
+import keep.user.server.model.userfunction.UserFunctionEntity;
 
 /**
- * Serviço de persistencia de {@link UserFunctionEntity}
+ * Serviço de persistencia de {@link UserEntity}
  *
  * @author Guilherme Dalmarco (dalmarco.gd@gmail.com)
  */
@@ -20,6 +22,8 @@ public class UserCRUDService extends AbstractCRUDService<UserEntity, UserDTO> {
 
     @Autowired
     private UserCRUDRepository userCRUDRepository;
+    @Autowired
+    private UserFunctionCRUDService userFunctionCRUDService;
 
     /**
      * {@inheritDoc}
@@ -37,10 +41,16 @@ public class UserCRUDService extends AbstractCRUDService<UserEntity, UserDTO> {
      */
     @Override
     public UserEntity convertToEntity(UserDTO dto, UserEntity entity) {
+    	entity.setCode(dto.getCode());
+    	entity.setCpf(dto.getCpf());
         entity.setName(dto.getName());
         entity.setEmail(dto.getEmail());
-        entity.setUsername(dto.getUsername());
-        entity.setPassword(dto.getPassword());
+        entity.setSituation(dto.getSituation());
+        entity.setAcessProfile(dto.getAcessProfile());
+        entity.setPhone(dto.getPhone());
+        if (dto.getUserFunction() != null) {
+			entity.setUserFunction(userFunctionCRUDService.getEntity(dto.getUserFunction().getId()));
+		}
         entity.setId(dto.getId());
         entity.setVersion(dto.getVersion());
         return entity;
@@ -54,12 +64,16 @@ public class UserCRUDService extends AbstractCRUDService<UserEntity, UserDTO> {
      */
     @Override
     public UserDTO convertToDTO(UserEntity entity, UserDTO dto) {
-        dto.setName(entity.getName());
-        dto.setEmail(entity.getEmail());
-        dto.setUsername(entity.getUsername());
-        dto.setPassword(entity.getPassword());
-        dto.setId(entity.getId());
-        dto.setVersion(entity.getVersion());
+    	dto.setCode(entity.getCode());
+    	dto.setCpf(entity.getCpf());
+    	dto.setName(entity.getName());
+    	dto.setEmail(entity.getEmail());
+    	dto.setSituation(entity.getSituation());
+    	dto.setAcessProfile(entity.getAcessProfile());
+    	dto.setPhone(entity.getPhone());
+    	dto.setUserFunction(userFunctionCRUDService.getDTO(entity.getUserFunction().getId()));
+    	dto.setId(entity.getId());
+    	dto.setVersion(entity.getVersion());
         return dto;
     }
 

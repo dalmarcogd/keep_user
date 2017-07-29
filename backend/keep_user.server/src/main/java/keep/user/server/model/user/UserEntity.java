@@ -21,7 +21,7 @@ import keep.user.server.model.userfunction.UserFunctionEntity;
  * @author Guilherme Dalmarco (dalmarco.gd@gmail.com)
  */
 @Entity
-@Table(name = "user")
+@Table(name = "usuario_externo")
 public class UserEntity extends BaseEntity {
 
 	public static final String CODE = "code";

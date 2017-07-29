@@ -10,7 +10,6 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
-
 /**
  * Implementação de de configuração do spring, substitui beans.xml
  *
@@ -35,7 +34,6 @@ public class SpringWebMvcConfigurerAdapter extends WebMvcConfigurerAdapter{
     public void addCorsMappings(CorsRegistry registry) {
     	registry.addMapping("/**")
 				.allowedMethods("PUT", "DELETE", "POST", "GET")
-//				.allowedHeaders("Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With")
 				.allowedOrigins("*")
 				.allowCredentials(false).maxAge(3600);
     }
