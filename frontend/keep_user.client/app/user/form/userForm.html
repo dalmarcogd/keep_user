@@ -1,0 +1,36 @@
+<div class="container">
+    <form id="userForm" data-toggle="validator" role="form">
+        <div class="form-group">
+            <label class="control-label">Código:</label>
+            <input type="text" name="code" ng-model="user.code" placeholder="Informe o código..." class="form-control" required>
+        </div>
+        <div class="form-group">
+            <label>E-mail:</label>
+            <input type="email" name="email" ng-model="user.email" placeholder="Informe o e-mail..." class="form-control" required>
+        </div>
+        <div class="form-group">
+            <label>Name:</label>
+            <input type="text" name="name" ng-model="user.name" placeholder="Informe o nome..." class="form-control" required>
+        </div>
+        <div class="form-group">
+            <label>CPF:</label>
+            <input type="text" name="cpf" ng-model="user.cpf" placeholder="Informe o cpf..." class="form-control" ui-mask="999.999.999-99" required>
+        </div>
+        <div class="form-group">
+            <label>Telefone:</label>
+            <input type="text" name="phone" ng-model="user.phone" placeholder="Informe o telefone..." class="form-control" required>
+        </div>
+        <div class="form-group">
+            <label>Função:</label>
+            <input type="text" name="userFunction" ng-model="user.userFunction" placeholder="Informe a função..." uib-typeahead="function as function.name for function in functions | filter:{name:$viewValue}" class="form-control" required>
+        </div>
+        <div class="form-group">
+            <label>Perfil:</label>
+            <input type="text" name="acessProfile" ng-model="user.acessProfile" placeholder="Informe o perfil..." uib-typeahead="profile.code as profile.name for profile in profiles | filter:{name:$viewValue}" class="form-control" required>
+        </div>
+        <div class="form-group">
+            <button type="button" class="btn btn-primary" ng-click="return()">Voltar</button>
+            <button type="submit" class="btn btn-primary" ng-click="save()">Salvar</button>
+        </div>
+    </form>
+</div>

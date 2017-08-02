@@ -1,6 +1,6 @@
 angular.module('keepUserApp')
 
-.controller('UserListController', ['$http', '$scope', '$filter', function($http, $scope, $filter) {
+.controller('UserListController', ['$http', '$scope', '$filter', '$state', function($http, $scope, $filter, $state) {
         $scope.loadUser = function load($http, $scope) {
             $http({
                 method: 'GET',
@@ -12,10 +12,10 @@ angular.module('keepUserApp')
                 $scope.rows.forEach(function(row) {
                     row.configHabilitado = function configHabilitado() {
                         console.log("oi;");
-                    }
+                    };
                 }, this);
             }, function myError(response) {
-                alert(response)
+                alert(response);
             });
         };
         $scope.loadUser($http, $scope);
@@ -29,13 +29,23 @@ angular.module('keepUserApp')
                 $scope.rows = response.data;
                 console.log($scope.rows);
             }, function myError(response) {
-                alert(response)
+                alert(response);
             });
+            $scope.loadUser($http, $scope);
         };
 
+
         $scope.editItem = function editItem(row) {
-            console.log("oi");
-        }
+            if (row.id) {
+                $state.go('userform', { id: row.id });
+            }
+        };
+
+        $scope.addItem = function editItem(row) {
+            if (row.id) {
+                $state.go('userform', { id: "new" });
+            }
+        };
 
         $scope.convertAcessProfile = function convertAcessProfile(acessProfile) {
             //  0-Aluno, 1-Gestor Municipal, 2-Gestor Estadual, 3-Gestor Nacional
@@ -51,7 +61,7 @@ angular.module('keepUserApp')
             if (acessProfile == 3) {
                 return "Gestor Nacional";
             }
-        }
+        };
 
         $scope.predicates = ['email', 'name', 'acessProfile'];
         $scope.selectedPredicate = $scope.predicates[0];

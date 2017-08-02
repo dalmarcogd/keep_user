@@ -6,7 +6,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -94,8 +93,8 @@ public abstract class AbstractCRUDController<O extends BaseDTO, E extends BaseEn
      * @param id - {@link Long}
      * @return {@link ResponseEntity}
      */
-    @GetMapping("/{id}")
-    public @ResponseBody ResponseEntity<?> read(@PathVariable(value = "id") Long id){
+    @GetMapping(params={"id"})
+    public @ResponseBody ResponseEntity<?> read(@RequestParam("id") Long id){
         return ResponseEntity.ok(getService().getDTO(id));
     }
 

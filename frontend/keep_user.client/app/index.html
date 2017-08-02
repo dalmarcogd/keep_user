@@ -19,6 +19,9 @@
 </head>
 
 <body ng-app="keepUserApp">
+    <div ng-controller="AlertController">
+        <div uib-alert ng-repeat="alert in alerts" ng-class="'alert-' + (alert.type || 'warning')" close="closeMessage($index)">{{alert.message}}</div>
+    </div>
     <nav class="navbar navbar-default" role="navigation">
         <div class="navbar-header">
             <button type="button" class="navbar-toggle">
