@@ -1,39 +1,37 @@
 angular.module('keepUserApp')
 
-.controller('UserListController', ['$http', '$scope', '$filter', '$state', function($http, $scope, $filter, $state) {
+.controller('UserListController', ['$http', '$scope', '$filter', '$state', '$rootScope', function($http, $scope, $filter, $state, $rootScope) {
         $scope.loadUser = function load($http, $scope) {
             $http({
                 method: 'GET',
                 url: 'http://localhost:8080/keep-user/users',
             }).then(function mySuccess(response) {
                 $scope.rows = response.data;
-                console.log($scope.rows);
-
                 $scope.rows.forEach(function(row) {
-                    row.configHabilitado = function configHabilitado() {
-                        console.log("oi;");
-                    };
+
                 }, this);
             }, function myError(response) {
-                alert(response);
+                $rootScope.addDanger("Erro ao consultar os registros. Tente novamente");
             });
         };
         $scope.loadUser($http, $scope);
         //remove to the real data holder
         $scope.removeItem = function removeItem(row) {
-            $http({
-                method: 'DELETE',
-                params: { "id": row.id },
-                url: 'http://localhost:8080/keep-user/users',
-            }).then(function mySuccess(response) {
-                $scope.rows = response.data;
-                console.log($scope.rows);
-            }, function myError(response) {
-                alert(response);
+            bootbox.confirm("Deseja realmente excluir o usuário " + row.name + "?", function(result) {
+                if (result) {
+                    $http({
+                        method: 'DELETE',
+                        params: { "id": row.id },
+                        url: 'http://localhost:8080/keep-user/users',
+                    }).then(function mySuccess(response) {
+                        $rootScope.addSuccess("Exclusão efetuada com sucesso.");
+                        $scope.loadUser($http, $scope);
+                    }, function myError(response) {
+                        $rootScope.addDanger("Erro ao excluir o registro. Tente novamente");
+                    });
+                }
             });
-            $scope.loadUser($http, $scope);
         };
-
 
         $scope.editItem = function editItem(row) {
             if (row.id) {

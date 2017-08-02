@@ -26,17 +26,31 @@ angular.module('keepUserApp')
         $scope.save = function() {
             if ($('#userForm').validator('validate').has('.has-error').length === 0) {
                 // form is valid
-                $http({
-                    method: 'POST',
-                    data: $scope.user,
-                    url: 'http://localhost:8080/keep-user/users',
-                }).then(function mySuccess(response) {
-                    $scope.user = response.data;
-                    $state.go('userlist');
-                    $rootScope.addSuccess("Cadastro efetuado com sucesso!");
-                }, function myError(response) {
-                    $rootScope.addDanger("Erro ao salvar o registro. Tente novamente");
-                });
+                if ($scope.user.id) {
+                    $http({
+                        method: 'PUT',
+                        data: $scope.user,
+                        url: 'http://localhost:8080/keep-user/users',
+                    }).then(function mySuccess(response) {
+                        $scope.user = response.data;
+                        $state.go('userlist');
+                        $rootScope.addSuccess("Alteração efetuada com sucesso!");
+                    }, function myError(response) {
+                        $rootScope.addDanger("Erro ao alterar o registro. Tente novamente");
+                    });
+                } else {
+                    $http({
+                        method: 'POST',
+                        data: $scope.user,
+                        url: 'http://localhost:8080/keep-user/users',
+                    }).then(function mySuccess(response) {
+                        $scope.user = response.data;
+                        $state.go('userlist');
+                        $rootScope.addSuccess("Cadastro efetuado com sucesso!");
+                    }, function myError(response) {
+                        $rootScope.addDanger("Erro ao salvar o registro. Tente novamente");
+                    });
+                }
             }
         };
 
