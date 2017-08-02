@@ -12,6 +12,7 @@ var paths = {
     scripts: 'app/**/*.js',
     styles: ['./app/**/*.css', './app/**/*.scss'],
     images: './images/**/*',
+    fonts: 'app/fonts/**/*',
     index: './app/index.html',
     partials: ['app/**/*.html', '!app/index.html'],
     distDev: './dist.dev',
@@ -33,7 +34,7 @@ pipes.orderedAppScripts = function() {
 };
 
 pipes.minifiedFileName = function() {
-    return plugins.rename(function (path) {
+    return plugins.rename(function(path) {
         path.extname = '.min' + path.extname;
     });
 };
@@ -56,8 +57,8 @@ pipes.builtAppScriptsProd = function() {
     return es.merge(scriptedPartials, validatedAppScripts)
         .pipe(pipes.orderedAppScripts())
         .pipe(plugins.sourcemaps.init())
-            .pipe(plugins.concat('app.min.js'))
-            .pipe(plugins.uglify())
+        .pipe(plugins.concat('app.min.js'))
+        .pipe(plugins.uglify())
         .pipe(plugins.sourcemaps.write())
         .pipe(gulp.dest(paths.distScriptsProd));
 };
@@ -83,7 +84,7 @@ pipes.validatedDevServerScripts = function() {
 
 pipes.validatedPartials = function() {
     return gulp.src(paths.partials)
-        .pipe(plugins.htmlhint({'doctype-first': false}))
+        .pipe(plugins.htmlhint({ 'doctype-first': false }))
         .pipe(plugins.htmlhint.reporter());
 };
 
@@ -95,7 +96,7 @@ pipes.builtPartialsDev = function() {
 pipes.scriptedPartials = function() {
     return pipes.validatedPartials()
         .pipe(plugins.htmlhint.failReporter())
-        .pipe(plugins.htmlmin({collapseWhitespace: true, removeComments: true}))
+        .pipe(plugins.htmlmin({ collapseWhitespace: true, removeComments: true }))
         .pipe(plugins.ngHtml2js({
             moduleName: "healthyGulpAngularApp"
         }));
@@ -110,8 +111,8 @@ pipes.builtStylesDev = function() {
 pipes.builtStylesProd = function() {
     return gulp.src(paths.styles)
         .pipe(plugins.sourcemaps.init())
-            .pipe(plugins.sass())
-            .pipe(plugins.minifyCss())
+        .pipe(plugins.sass())
+        .pipe(plugins.minifyCss())
         .pipe(plugins.sourcemaps.write())
         .pipe(pipes.minifiedFileName())
         .pipe(gulp.dest(paths.distProd));
@@ -125,6 +126,16 @@ pipes.processedImagesDev = function() {
 pipes.processedImagesProd = function() {
     return gulp.src(paths.images)
         .pipe(gulp.dest(paths.distProd + '/images/'));
+};
+
+pipes.processedFontsDev = function() {
+    return gulp.src(paths.fonts)
+        .pipe(gulp.dest(paths.distDev + '/fonts/'));
+};
+
+pipes.processedFontsProd = function() {
+    return gulp.src(paths.fonts)
+        .pipe(gulp.dest(paths.distProd + '/fonts/'));
 };
 
 pipes.validatedIndex = function() {
@@ -145,9 +156,9 @@ pipes.builtIndexDev = function() {
 
     return pipes.validatedIndex()
         .pipe(gulp.dest(paths.distDev)) // write first to get relative path for inject
-        .pipe(plugins.inject(orderedVendorScripts, {relative: true, name: 'bower'}))
-        .pipe(plugins.inject(orderedAppScripts, {relative: true}))
-        .pipe(plugins.inject(appStyles, {relative: true}))
+        .pipe(plugins.inject(orderedVendorScripts, { relative: true, name: 'bower' }))
+        .pipe(plugins.inject(orderedAppScripts, { relative: true }))
+        .pipe(plugins.inject(appStyles, { relative: true }))
         .pipe(gulp.dest(paths.distDev));
 };
 
@@ -159,19 +170,19 @@ pipes.builtIndexProd = function() {
 
     return pipes.validatedIndex()
         .pipe(gulp.dest(paths.distProd)) // write first to get relative path for inject
-        .pipe(plugins.inject(vendorScripts, {relative: true, name: 'bower'}))
-        .pipe(plugins.inject(appScripts, {relative: true}))
-        .pipe(plugins.inject(appStyles, {relative: true}))
-        .pipe(plugins.htmlmin({collapseWhitespace: true, removeComments: true}))
+        .pipe(plugins.inject(vendorScripts, { relative: true, name: 'bower' }))
+        .pipe(plugins.inject(appScripts, { relative: true }))
+        .pipe(plugins.inject(appStyles, { relative: true }))
+        .pipe(plugins.htmlmin({ collapseWhitespace: true, removeComments: true }))
         .pipe(gulp.dest(paths.distProd));
 };
 
 pipes.builtAppDev = function() {
-    return es.merge(pipes.builtIndexDev(), pipes.builtPartialsDev(), pipes.processedImagesDev());
+    return es.merge(pipes.builtIndexDev(), pipes.builtPartialsDev(), pipes.processedImagesDev(), pipes.processedFontsDev());
 };
 
 pipes.builtAppProd = function() {
-    return es.merge(pipes.builtIndexProd(), pipes.processedImagesProd());
+    return es.merge(pipes.builtIndexProd(), pipes.processedImagesProd(), pipes.processedFontsProd());
 };
 
 // == TASKS ========
@@ -252,9 +263,9 @@ gulp.task('clean-build-app-prod', ['clean-prod'], pipes.builtAppProd);
 gulp.task('watch-dev', ['clean-build-app-dev', 'validate-devserver-scripts'], function() {
 
     // start nodemon to auto-reload the dev server
-    plugins.nodemon({ script: 'server.js', ext: 'js', watch: ['devServer/'], env: {NODE_ENV : 'development'} })
+    plugins.nodemon({ script: 'server.js', ext: 'js', watch: ['devServer/'], env: { NODE_ENV: 'development' } })
         .on('change', ['validate-devserver-scripts'])
-        .on('restart', function () {
+        .on('restart', function() {
             console.log('[nodemon] restarted dev server');
         });
 
@@ -291,14 +302,14 @@ gulp.task('watch-dev', ['clean-build-app-dev', 'validate-devserver-scripts'], fu
 gulp.task('watch-prod', ['clean-build-app-prod', 'validate-devserver-scripts'], function() {
 
     // start nodemon to auto-reload the dev server
-    plugins.nodemon({ script: 'server.js', ext: 'js', watch: ['devServer/'], env: {NODE_ENV : 'production'} })
+    plugins.nodemon({ script: 'server.js', ext: 'js', watch: ['devServer/'], env: { NODE_ENV: 'production' } })
         .on('change', ['validate-devserver-scripts'])
-        .on('restart', function () {
+        .on('restart', function() {
             console.log('[nodemon] restarted dev server');
         });
 
     // start live-reload server
-    plugins.livereload.listen({start: true});
+    plugins.livereload.listen({ start: true });
 
     // watch index
     gulp.watch(paths.index, function() {

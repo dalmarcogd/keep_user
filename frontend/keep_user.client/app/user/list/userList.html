@@ -1,0 +1,56 @@
+<table class="table" st-pagination-scroll st-pipe="mc.callServer" st-table="mc.displayed">
+    <thead>
+        <tr>
+            <th>E-mail</th>
+            <th>Nome</th>
+            <th>Perfil</th>
+            <th>Habilitado</th>
+            <th>Ações</th>
+        </tr>
+        <tr>
+            <th><input st-search="email" /></th>
+            <th><input st-search="name" /></th>
+            <th><input st-search="acessProfile" /></th>
+            <th></th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody ng-show="!mc.isLoading">
+        <tr ng-repeat="row in rows">
+            <td>{{row.email}}</td>
+            <td>{{row.name}}</td>
+            <td>{{convertAcessProfile(row.acessProfile)}}</td>
+            <td>
+                <div class="btn-group">
+                    <label class="btn btn-success" ng-model="row.configHabilitado" uib-btn-radio="'0'" uncheckable>Sim</label>
+                    <label class="btn btn-danger" ng-model="row.configHabilitado" uib-btn-radio="'1'" uncheckable>Não</label>
+                </div>
+            </td>
+            <td>
+                <button type="button" ng-click="removeItem(row)" class="btn btn-sm btn-success">
+					<i class="glyphicon glyphicon-remove-circle">
+					</i>
+                </button>
+                <button type="button" ng-click="editItem(row)" class="btn btn-sm btn-primary">
+					<i class="glyphicon glyphicon-remove-circle">
+					</i>
+                </button>
+                <button type="button" ng-click="removeItem(row)" class="btn btn-sm btn-danger">
+					<i class="glyphicon glyphicon-remove-circle">
+					</i>
+                </button>
+            </td>
+        </tr>
+    </tbody>
+    <tbody ng-show="mc.isLoading">
+        <tr>
+            <td colspan="6" class="text-center">Carregando ... </td>
+        </tr>
+    </tbody>
+    <tfoot>
+        <tr>
+            <td class="text-center" st-pagination="" st-items-by-page="10" colspan="6">
+            </td>
+        </tr>
+    </tfoot>
+</table>

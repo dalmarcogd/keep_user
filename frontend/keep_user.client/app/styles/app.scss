@@ -1,2 +1,8 @@
 @import "settings";
 @import "../../bower_components/foundation/scss/foundation";
+@import "bootstrap.min.css";
+@import "bootstrap-theme.min.css";
+body {
+    height: 100%;
+    width: 100%;
+}

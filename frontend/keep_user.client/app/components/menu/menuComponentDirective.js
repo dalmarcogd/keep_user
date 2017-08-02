@@ -1,4 +1,4 @@
-angular.module('keepUserApp', [])
+/*angular.module('keepUserApp', [])
     .controller('MenuComponentController', ['$scope', function($scope) {
 
     }])
@@ -7,4 +7,4 @@ angular.module('keepUserApp', [])
             templateUrl: 'components/menuComponent/menuComponent.html',
             controller: MenuComponentController
         };
-    }]);
+    }]);*/
