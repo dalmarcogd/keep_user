@@ -27,4 +27,11 @@ public class UserQueryService {
         q.add(Restrictions.eq(UserEntity.NAME, name));
         return ClassUtils.toAssignable(UserEntity.class, q.uniqueResult());
     }
+
+    @Transactional(readOnly = true)
+    public UserEntity getUserByCPF(String cpf) {
+        Criteria q = criteriaFactory.createCriteria(UserEntity.class);
+        q.add(Restrictions.eq(UserEntity.CPF, cpf));
+        return ClassUtils.toAssignable(UserEntity.class, q.uniqueResult());
+    }
 }

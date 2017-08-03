@@ -48,7 +48,7 @@ angular.module('keepUserApp')
                         $state.go('userlist');
                         $rootScope.addSuccess("Cadastro efetuado com sucesso!");
                     }, function myError(response) {
-                        $rootScope.addDanger("Erro ao salvar o registro. Tente novamente");
+                        $rootScope.addDanger(response.data.message);
                     });
                 }
             }

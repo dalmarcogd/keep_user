@@ -3,6 +3,9 @@ package keep.user.server.crud.user.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import keep.user.server.core.exception.ValidationException;
+import keep.user.server.core.exception.crud.ValidationCRUDException;
+import keep.user.server.core.utils.StringUtils;
 import keep.user.server.crud.base.repository.AbstractCRUDRepository;
 import keep.user.server.crud.base.service.AbstractCRUDService;
 import keep.user.server.crud.user.repository.UserCRUDRepository;
@@ -24,6 +27,8 @@ public class UserCRUDService extends AbstractCRUDService<UserEntity, UserDTO> {
     private UserCRUDRepository userCRUDRepository;
     @Autowired
     private UserFunctionCRUDService userFunctionCRUDService;
+    @Autowired
+    private UserQueryService userQueryService;
 
     /**
      * {@inheritDoc}
@@ -93,9 +98,15 @@ public class UserCRUDService extends AbstractCRUDService<UserEntity, UserDTO> {
 
 	/**
 	 * {@inheritDoc}
+	 * @throws ValidationException
 	 */
 	@Override
-	protected void internalValidate(UserEntity entity) {
-
+	protected void internalValidate(UserEntity entity) throws ValidationCRUDException {
+		if (StringUtils.isNotEmpty(entity.getCpf())) {
+			UserEntity anotherUser = userQueryService.getUserByCPF(entity.getCpf());
+			if (anotherUser != null) {
+				throw new ValidationCRUDException("Operação não realizada. Usuário já incluído.");
+			}
+		}
 	}
 }

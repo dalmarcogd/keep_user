@@ -28,6 +28,7 @@ public abstract class AbstractCRUDService<E extends BaseEntity, O extends BaseDT
      */
     @Transactional(rollbackFor = Throwable.class)
     public E save(E entity) throws ValidationException {
+    	this.validate(entity);
         return getCRUDRepository().save(entity);
     }
 
@@ -113,8 +114,9 @@ public abstract class AbstractCRUDService<E extends BaseEntity, O extends BaseDT
 	 * Aplica validações.
 	 * @return um {@link void}
 	 * @param um {@link AbstractCRUDService}
+     * @throws ValidationCRUDException
 	 */
-	protected abstract void internalValidate(E entity);
+	protected abstract void internalValidate(E entity) throws ValidationCRUDException;
 
 	/**
      * Retorna a implementação do repositório para {@link E}
