@@ -7,11 +7,36 @@ angular.module('keepUserApp')
                 url: 'http://localhost:8080/keep-user/users',
             }).then(function mySuccess(response) {
                 $scope.rows = response.data;
-                $scope.rows.forEach(function(row) {
-
-                }, this);
             }, function myError(response) {
                 $rootScope.addDanger("Erro ao consultar os registros. Tente novamente");
+            });
+        };
+        $scope.configHab = function configHab(row) {
+            row.situation = 0;
+            $http({
+                method: 'PUT',
+                data: row,
+                url: 'http://localhost:8080/keep-user/users',
+            }).then(function mySuccess(response) {
+                row = response.data;
+                $rootScope.addSuccess("Usuário habilitado com sucesso!");
+                $scope.loadUser($http, $scope);
+            }, function myError(response) {
+                $rootScope.addDanger("Erro ao habilitar o registro. Tente novamente");
+            });
+        };
+        $scope.configDesab = function configDesab(row) {
+            row.situation = 1;
+            $http({
+                method: 'PUT',
+                data: row,
+                url: 'http://localhost:8080/keep-user/users',
+            }).then(function mySuccess(response) {
+                row = response.data;
+                $rootScope.addSuccess("Usuário desabilitado com sucesso!");
+                $scope.loadUser($http, $scope);
+            }, function myError(response) {
+                $rootScope.addDanger("Erro ao desabilitar o registro. Tente novamente");
             });
         };
         $scope.loadUser($http, $scope);

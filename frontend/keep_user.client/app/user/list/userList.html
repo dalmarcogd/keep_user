@@ -22,8 +22,8 @@
             <td>{{convertAcessProfile(row.acessProfile)}}</td>
             <td>
                 <div class="btn-group">
-                    <label class="btn btn-success" ng-model="row.configHabilitado" uib-btn-radio="'0'" uncheckable>Sim</label>
-                    <label class="btn btn-danger" ng-model="row.configHabilitado" uib-btn-radio="'1'" uncheckable>Não</label>
+                    <label class="btn btn-success" ng-model="row.situation" ng-click="configHab(row)" uib-btn-radio="0" uncheckable>Sim</label>
+                    <label class="btn btn-danger" ng-model="row.situation" ng-click="configDesab(row)" uib-btn-radio="1" uib-uncheckable="uncheckable">Não</label>
                 </div>
             </td>
             <td>

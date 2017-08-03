@@ -14,11 +14,11 @@ app.controller('AlertController', function($rootScope) {
     $rootScope.alerts = [];
     $rootScope.addDanger = function addDanger(message) {
         $rootScope.alerts.push({ type: 'danger', message: message });
-    }
+    };
     $rootScope.addSuccess = function addSuccess(message) {
         $rootScope.alerts.push({ type: 'success', message: message });
-    }
+    };
     $rootScope.closeMessage = function closeMessage(index) {
         $rootScope.alerts.splice(index, 1);
-    }
+    };
 });
